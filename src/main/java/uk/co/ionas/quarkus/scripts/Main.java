@@ -81,10 +81,10 @@ public class Main implements QuarkusApplication {
                 .invoke(r -> System.out.println("r:: " + r.valueBody() + " on " + Thread.currentThread().getName()))
                 .onFailure()
                 .invoke(err ->  err.printStackTrace())
-                .subscribe()
-                .with(r -> {
-                    System.out.println(r.valueBody());
-                });
+                .await()
+                .indefinitely();
+
+
 
         return 0;
     }
