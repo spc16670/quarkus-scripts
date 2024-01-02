@@ -6,33 +6,26 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 import org.opensearch.client.transport.OpenSearchTransport;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
 
 @ApplicationScoped
+@RequiredArgsConstructor
 public class OpenSearchTransportProducer {
-
     private final Instance<ObjectMapper> objectMappers;
-
     private final OpenSearchConfig config;
 
-    private Set<OpenSearchTransport> transports = new HashSet<>();
+    private final Set<OpenSearchTransport> transports = new HashSet<>();
 
-    public OpenSearchTransportProducer(final Instance<ObjectMapper> objectMappers,
-                                       final OpenSearchConfig config) {
-        this.objectMappers = objectMappers;
-        this.config = config;
-    }
 
     @Produces
     @Singleton
-    public OpenSearchTransport openSearchTransport() throws NoSuchAlgorithmException, KeyManagementException {
+    public OpenSearchTransport openSearchTransport() {
         if (config.awsService().isPresent()) {
             return addTransport(OpenSearchTransportHelper.createAwsSdk2Transport(config, objectMappers));
         }
@@ -54,5 +47,4 @@ public class OpenSearchTransportProducer {
             }
         }
     }
-
 }

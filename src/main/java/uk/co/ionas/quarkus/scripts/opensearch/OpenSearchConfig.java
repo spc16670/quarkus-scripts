@@ -29,6 +29,9 @@ public interface OpenSearchConfig {
     @WithDefault("http")
     String protocol();
 
+    @WithDefault("false")
+    boolean skipHostVerification();
+
     /**
      * The username for basic HTTP authentication.
      */
